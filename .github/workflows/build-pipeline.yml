@@ -46,6 +46,4 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: awesome-calculator
-        path: src/dist    
-
-
+        path: src/dist
