@@ -3,25 +3,27 @@ name: Install Calculator Package From Artifact
 on:
   workflow_run:
     workflows: ["Awesome Calculator CI build"]
-    types: [completed]
+    types:
+      - completed
 
 jobs:
   install_package:
     if: >
       github.event.workflow_run.conclusion == 'success' &&
-      github.event.workflow_run.event == 'push'
+      github.event.workflow_run.name == 'Awesome Calculator CI build'
     runs-on: ubuntu-latest
 
     steps:
       - name: Download wheel artifact
         uses: actions/download-artifact@v4
         with:
-          name: awesome-calculator   # must match exact artifact name
+          name: awesome-calculator
           path: downloaded-dist
 
-      - name: Show downloaded files
+      - name: Debug downloaded directory
         run: |
-          ls -R downloaded-dist || echo "No artifacts"
+          echo "Downloaded files:"
+          ls -R downloaded-dist || echo "No files found"
 
       - name: Install wheel
         run: |
