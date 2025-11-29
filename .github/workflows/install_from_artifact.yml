@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Download artifacts from triggering workflow
+      - name: Download artifacts from triggering workflow run
         uses: actions/download-artifact@v4
         with:
           run-id: ${{ github.event.workflow_run.id }}
@@ -24,8 +24,10 @@ jobs:
 
       - name: Install wheel
         run: |
-          pip install $(find downloaded-artifacts -name "*.whl" | head -n 1)
+          WHEEL=$(find downloaded-artifacts -name "*.whl" | head -n 1)
+          echo "Installing wheel: $WHEEL"
+          pip install "$WHEEL"
 
       - name: Verify installation
         run: |
-          pip show calculator || echo "Package not found"
+          pip show calculator || echo "Package not installed"
