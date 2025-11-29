@@ -4,7 +4,7 @@ setup(
     name="calculator",
     version="1.0.0",
     author="Rishi Umaria",
-    author_email="rishiumaria24@gmail.com",
+    author_email="rumaria6371@conestogac.on.ca",
     description="A simple calculator package from Week 10.",
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
