@@ -8,7 +8,6 @@ on:
 
 jobs:
   install_package:
-    name: Download & Install Wheel
     runs-on: ubuntu-latest
 
     steps:
@@ -29,7 +28,4 @@ jobs:
 
       - name: Verify installation
         run: |
-          python - <<EOF
-import calculator
-print("Calculator package installed successfully!")
-EOF
+          python -c "import calculator; print('Calculator package installed successfully!')"
