@@ -44,6 +44,10 @@ jobs:
       - name: Install dependencies
         run: pip install pytest
 
+      - name: Add src to PYTHONPATH
+        run: echo "PYTHONPATH=$PWD/src" >> $GITHUB_ENV
+
+
       - name: Run unit tests
         run: pytest -q
 
