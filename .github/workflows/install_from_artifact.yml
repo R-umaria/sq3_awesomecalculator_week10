@@ -2,7 +2,7 @@ name: Install Package From Artifact
 
 on:
   workflow_run:
-    workflows: ["Python Package Build"]
+    workflows: ["Main CI Pipeline"]
     types: [completed]
 
 jobs:
