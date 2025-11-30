@@ -3,7 +3,8 @@ name: Install Package From Artifact
 on:
   workflow_run:
     workflows: ["Main CI Pipeline"]
-    types: [completed]
+    types:
+      - completed
 
 jobs:
   install_package:
@@ -20,4 +21,4 @@ jobs:
         run: pip install wheel-download/*.whl
 
       - name: Verify installation
-        run: python -c "import calculator; print('Calculator installed OK')"
+        run: python -c "import calculator; print('Installed Successfully')"
