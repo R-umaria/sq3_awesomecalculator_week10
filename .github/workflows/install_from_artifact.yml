@@ -3,8 +3,7 @@ name: Install Package From Artifact
 on:
   workflow_run:
     workflows: ["Python Package Build"]
-    types:
-      - completed
+    types: [completed]
 
 jobs:
   install_package:
@@ -17,15 +16,8 @@ jobs:
           name: calculator-wheel
           path: wheel-download
 
-      - name: Show downloaded artifacts
-        run: |
-          echo "=== Wheel Artifacts Downloaded ==="
-          ls -R wheel-download
-
       - name: Install wheel
-        run: |
-          pip install wheel-download/*.whl
+        run: pip install wheel-download/*.whl
 
       - name: Verify installation
-        run: |
-          python -c "import calculator; print('Calculator package installed successfully!')"
+        run: python -c "import calculator; print('Calculator installed OK')"

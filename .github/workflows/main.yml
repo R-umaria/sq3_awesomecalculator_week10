@@ -6,6 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
+
   lint:
     name: Pre-commit + Pylint
     runs-on: ubuntu-latest
@@ -13,21 +14,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.10"
 
-      - name: Install dependencies
-        run: |
-          pip install -r requirements.txt || true
-          pip install pylint pre-commit
-
-      - name: Run pre-commit
-        run: echo "No pre-commit configuration found. Skipping."
+      - name: Install lint tools
+        run: pip install pylint
 
       - name: Run pylint
         run: pylint src || true
+
 
   unit_tests:
     name: Unit Tests
@@ -41,39 +37,20 @@ jobs:
         with:
           python-version: "3.10"
 
-      - name: Install dependencies
+      - name: Install pytest
         run: pip install pytest
 
       - name: Add src to PYTHONPATH
         run: echo "PYTHONPATH=$PWD/src" >> $GITHUB_ENV
 
-
-      - name: Run unit tests
+      - name: Run tests
         run: pytest -q
 
-  happy_sad_tests:
-    name: Happy & Sad Path Tests
-    runs-on: ubuntu-latest
-    needs: unit_tests
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.10"
-
-      - name: Run happy + sad path tests
-        run: |
-          echo "Add your happy/sad path tests here"
-          # Example:
-          # python happy_sad_tests.py
-          echo "Happy/Sad tests complete."
 
   acceptance_tests:
     name: Acceptance Tests
     runs-on: ubuntu-latest
-    needs: happy_sad_tests
+    needs: unit_tests
 
     steps:
       - uses: actions/checkout@v4
@@ -85,5 +62,8 @@ jobs:
       - name: Install pytest
         run: pip install pytest
 
-      - name: Run Acceptance Tests
+      - name: Add src to PYTHONPATH
+        run: echo "PYTHONPATH=$PWD/src" >> $GITHUB_ENV
+
+      - name: Run acceptance tests
         run: pytest -q --disable-warnings --maxfail=1
