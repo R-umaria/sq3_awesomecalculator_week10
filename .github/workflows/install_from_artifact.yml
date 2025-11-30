@@ -1,33 +1,35 @@
-name: Install Calculator Package From Artifact
+name: Install Package From Artifact
 
 on:
   workflow_run:
-    workflows: ["Awesome Calculator CI build"]
-    types: [completed]
+    workflows: ["Python Package Build"]
+    types:
+      - completed
 
 jobs:
   install_package:
+    name: Download & Install Wheel
     runs-on: ubuntu-latest
 
-    # Only run if the triggering workflow succeeded
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
-
     steps:
-      - name: Download all artifacts from the triggering workflow run
+      - name: Download wheel artifact
         uses: actions/download-artifact@v4
         with:
-          run-id: ${{ github.event.workflow_run.id }}
-          path: downloaded-dist
+          name: calculator-wheel
+          path: wheel-download
 
-      - name: Show downloaded files
+      - name: Show downloaded artifacts
         run: |
-          echo "=== Downloaded Files ==="
-          ls -R downloaded-dist || echo "No artifacts found!"
+          echo "=== Wheel Artifacts Downloaded ==="
+          ls -R wheel-download
 
       - name: Install wheel
         run: |
-          pip install downloaded-dist/**/*.whl
+          pip install wheel-download/*.whl
 
       - name: Verify installation
         run: |
-          pip show calculator || echo "Package not installed"
+          python - <<EOF
+import calculator
+print("Calculator package installed successfully!")
+EOF
