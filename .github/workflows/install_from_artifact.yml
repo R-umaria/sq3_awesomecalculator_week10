@@ -9,6 +9,7 @@ on:
 jobs:
   install_package:
     runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }} # Good practice: only run if main pipeline succeeded
 
     steps:
       - name: Download wheel artifact
@@ -16,6 +17,9 @@ jobs:
         with:
           name: calculator-wheel
           path: wheel-download
+          # THE FIX: Tell it to download from the triggering workflow run
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install wheel
         run: pip install wheel-download/*.whl
